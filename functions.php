@@ -12,6 +12,14 @@ if ( ! isset( $content_width ) ) {
 	$content_width = 640; /* pixels */
 }
 
+function _s_settings() {  
+	// Add category metabox to page or other content types
+	//register_taxonomy_for_object_type('category', 'page');  
+}
+ // Add to the admin_init hook of your theme functions.php file 
+add_action( 'admin_init', '_s_settings' );
+
+
 if ( ! function_exists( '_s_setup' ) ) :
 /**
  * Sets up theme defaults and registers support for various WordPress features.
@@ -92,17 +100,31 @@ add_action( 'widgets_init', '_s_widgets_init' );
  * Enqueue scripts and styles.
  */
 function _s_scripts() {
+	wp_enqueue_style( 'twitter-bootstrap', get_template_directory_uri() . '/bootstrap/css/bootstrap.min.css' );
+
+	wp_enqueue_style( 'twitter-bootstrap-theme', get_template_directory_uri() . '/bootstrap/css/bootstrap-theme.min.css', array('twitter-bootstrap') );
+
 	wp_enqueue_style( '_s-style', get_stylesheet_uri() );
 
-	wp_enqueue_script( '_s-navigation', get_template_directory_uri() . '/js/navigation.js', array(), '20120206', true );
+	wp_enqueue_script( 'twitter-bootstrap', get_template_directory_uri() . '/bootstrap/js/bootstrap.min.js', array('jquery'), '20120206', true );
 
 	wp_enqueue_script( '_s-skip-link-focus-fix', get_template_directory_uri() . '/js/skip-link-focus-fix.js', array(), '20130115', true );
+
+	wp_enqueue_script( '_s-actions', get_template_directory_uri() . '/js/actions.js', array('jquery', 'twitter-bootstrap'), '20120206', true );
 
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
 	}
 }
 add_action( 'wp_enqueue_scripts', '_s_scripts' );
+add_filter( 'wp_default_scripts', 'dequeue_jquery_migrate' );
+
+function dequeue_jquery_migrate( &$scripts ){
+	if(!is_admin()){
+		$scripts->remove( 'jquery');
+		$scripts->add( 'jquery', false, array( 'jquery-core' ), '1.10.2' );
+	}
+}
 
 /**
  * Implement the Custom Header feature.
@@ -128,3 +150,8 @@ require get_template_directory() . '/inc/customizer.php';
  * Load Jetpack compatibility file.
  */
 require get_template_directory() . '/inc/jetpack.php';
+
+/**
+ * Register Custom Navigation Walker. Twitter Bootstrap compatibility.
+ */
+require_once( get_template_directory() . '/inc/wp-bootstrap-navwalker-master/wp_bootstrap_navwalker.php' );
