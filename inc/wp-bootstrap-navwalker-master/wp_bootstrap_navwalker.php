@@ -60,6 +60,11 @@ class wp_bootstrap_navwalker extends Walker_Nav_Menu {
 			$classes = empty( $item->classes ) ? array() : (array) $item->classes;
 			$classes[] = 'menu-item-' . $item->ID;
 
+			// Add a custom class to the first item to aid styling
+			if ($item->menu_order == 1) {
+				$classes[] = 'first-item';
+			}
+
 			$class_names = join( ' ', apply_filters( 'nav_menu_css_class', array_filter( $classes ), $item, $args ) );
 
 			if ( $args->has_children )
