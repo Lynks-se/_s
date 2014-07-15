@@ -6,12 +6,16 @@
  *
  * @package _s
  */
+
+// Tvinga IE att använda sin mest moderna layoutmotor
+header('X-UA-Compatible: IE=edge,chrome=1');
+header('X-nerd: Use the source, Spock!');
+
 ?><!DOCTYPE html>
 <html <?php language_attributes(); ?>>
 <head>
 <meta charset="<?php bloginfo( 'charset' ); ?>">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title><?php wp_title( '|', true, 'right' ); ?></title>
 <link rel="profile" href="http://gmpg.org/xfn/11">
 <link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>">
